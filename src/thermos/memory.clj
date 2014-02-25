@@ -6,4 +6,8 @@
 
 (def status @*drop*)
 
+(defn delete [key]
+  (dosync
+   (alter *drop* dissoc key)))
+
 

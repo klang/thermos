@@ -10,7 +10,7 @@
             [ring.middleware.basic-authentication :as basic]
             [cemerick.drawbridge :as drawbridge]
             [environ.core :refer [env]])
-  (:use [thermos.memory :only [mset status]]
+  (:use [thermos.memory :only [mset status delete]]
         [hiccup core form]
         [hiccup.page :only (html5)]
         [hiccup.middleware :only (wrap-base-url)]))
@@ -31,16 +31,25 @@
   (GET "/" [] 
        (html5 
         (form-to 
-         [:post "/drop"]
-         "key:" (text-field :key) "value:" (text-field :value) 
-         (submit-button "drop"))
+         [:post "/insert"]
+         (submit-button "insert") "key:" (text-field :key) "value:" (text-field :value) )
+        (form-to 
+         [:post "/delete"]
+         (submit-button "delete") "key:" (text-field :key))
+        (form-to [:post "/status"] (submit-button "status"))
+
         [:pre (flatten (map #(vector (first %) " " (second %) "\n")
                             (take 100 (sort @thermos.memory/*drop*))))  ]))
 
- (ANY "/drop" [key value] 
+  (ANY "/insert" [key value] 
         (do 
           (mset key value)
-          (str "1")))
+          (str "<a href=/>back</a>")))
+
+ (ANY "/delete" [key value] 
+      (do 
+        (delete key)
+        (str "<a href=/>back</a>")))
 
   (ANY "/status" []
        (html5 
