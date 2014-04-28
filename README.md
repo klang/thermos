@@ -74,6 +74,10 @@ Then you can launch the REPL:
 Everything you enter will be evaluated remotely in the running dyno,
 which can be very useful for debugging or inspecting live data.
 
+## Extra information
+
+[getting started with clojure](https://devcenter.heroku.com/articles/getting-started-with-clojure#prerequisites)
+
 ## License
 
 Copyright © 2014 FIXME
